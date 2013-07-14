@@ -79,5 +79,5 @@ int main(int argc, const char* argv[])
 
     std::cout << max_so_far << std::endl;
     
-	return 0;
+    return 0;
 }
