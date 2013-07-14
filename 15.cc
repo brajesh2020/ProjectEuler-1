@@ -9,7 +9,6 @@ int main(int argc, const char* argv[])
     {
         T[i] = 1;
     }
-
     for (int i = 1; i <= 20; i++)
     {
         for (int j = 1; j <= 20; j++)
@@ -17,8 +16,6 @@ int main(int argc, const char* argv[])
             T[j] += T[j-1];
         }
     }
-
-    std::cout << T[20] << std::endl;
-    
-	return 0;
+    std::cout << T[20] << std::endl;  
+    return 0;
 }
