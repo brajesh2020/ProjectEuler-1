@@ -1,5 +1,4 @@
 #include <iostream>
-#include <set>
 #include <stdio.h>
 
 bool visited[10000002] = {};
@@ -22,29 +21,25 @@ inline void InitPrimeTable()
     }
 }
 
-std::set<long long> r_set;
-bool IsRepunitDividedBy(long long divisor, long long k)
+long long ModPow(long long a, long long n, long long mod)
 {
-    r_set.clear();
-    long long r = 0;
-    long long m = 10000000000 % divisor;
-    long long u = 1111111111 % divisor;
-    for (int i = 0; i < k; i++)
+    long long rv = 1;
+    for (; n > 0; n >>= 1)
     {
-        r = (m*r + u) % divisor;
-        
-        if (r_set.find(r) != r_set.end())
+        if (n & 1)
         {
-            return false;
+            rv *= a;
+            rv %= mod;
         }
-        r_set.insert(r);
-
-        if (r == 0)
-        {
-            return k % (i+1) == 0;
-        }
+        a *= a;
+        a %= mod;
     }
-    return false;
+    return rv % mod;
+}
+
+bool IsRepunitDividedBy(long long divisor, long long power)
+{
+    return ModPow(10, power, divisor * 9) == 1;
 }
 
 int main(int argc, char* argv[])
@@ -55,7 +50,7 @@ int main(int argc, char* argv[])
     long long prime_sum = 0;
     for (int i = 0; i < 664579; i++)
     {
-        if (IsRepunitDividedBy(prime[i], 100000000))
+        if (IsRepunitDividedBy(prime[i], 1000000000))
         {
             prime_count++;
             prime_sum += prime[i];
