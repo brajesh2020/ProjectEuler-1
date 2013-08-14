@@ -2,16 +2,6 @@
 #include <set>
 #include <stdio.h>
 
-inline long long minimum(long long a, long long b)
-{
-    return (a < b) ? a : b;
-}
-
-inline long long maximum(long long a, long long b)
-{
-    return (a > b) ? a : b;
-}
-
 inline long long Norm(long long a)
 {
     return (a < 0) ? -a : a;
