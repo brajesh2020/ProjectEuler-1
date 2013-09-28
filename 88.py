@@ -16,10 +16,8 @@ def init_product_sum_set(number):
             continue
         k = number - d - q + 2
         product_sum_set_cache[number].add(k)
-        for i in product_sum_set_cache[d]:
+        for i in product_sum_set_cache[q]:
             product_sum_set_cache[number].add(k + i - 1)
-        for j in product_sum_set_cache[q]:
-            product_sum_set_cache[number].add(k + j - 1)
     
 def main():
     min_product_sum = [2*n for n in range(PROBLEM_BOUND + 1)]
