@@ -12,5 +12,5 @@ sub sum_of_multiples {
     print $sum . "\n";
 }
 
-&sum_of_multiples(10);
-&sum_of_multiples(1000);
+sum_of_multiples(10);
+sum_of_multiples(1000);
