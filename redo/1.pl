@@ -4,7 +4,7 @@ use warnings;
 sub sum_of_multiples {
     my ($bound) = @_;
     my $sum = 0;
-    for (my $i = 1; $i < $bound; $i++) {
+    foreach my $i (1 .. $bound - 1) {
         if ($i % 3 == 0 or $i % 5 == 0) {
             $sum += $i;
         }
