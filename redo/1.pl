@@ -9,8 +9,12 @@ sub sum_of_multiples {
             $sum += $i;
         }
     }
-    print $sum . "\n";
+    print($sum . "\n");
 }
 
-sum_of_multiples(10);
-sum_of_multiples(1000);
+sub main() {
+    sum_of_multiples(10);
+    sum_of_multiples(1000);
+}
+
+main()
