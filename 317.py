@@ -6,9 +6,6 @@ def shell_integration(h, v, g):
     return math.pi * (x2 * (v**2/(2*g) + h) - 0.25 * x2**2 * g / v**2)
     
 def main():
-    #h = 100.0
-    #v = 20.0
-    #g = 9.81
     print(shell_integration(h=100.0, v=20.0, g=9.81))
     
 if __name__ == '__main__':
