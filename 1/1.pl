@@ -1,15 +1,17 @@
 use strict;
 use warnings;
 
+sub sum_of_multiple {
+    my ($multiple, $bound) = @_;
+    my $multiple_bound = $bound - ($bound % $multiple);
+    return $multiple_bound * (int($multiple_bound / $multiple) + 1) / 2;
+}
+
 sub sum_of_multiples {
     my ($bound) = @_;
-    my $sum = 0;
-    foreach my $i (1 .. $bound - 1) {
-        if ($i % 3 == 0 or $i % 5 == 0) {
-            $sum += $i;
-        }
-    }
-    print($sum . "\n");
+    my $sum = sum_of_multiple(3, $bound - 1) + sum_of_multiple(5, $bound - 1) 
+            - sum_of_multiple(15, $bound - 1);
+    print "$sum\n";
 }
 
 sub main() {
@@ -17,4 +19,4 @@ sub main() {
     sum_of_multiples(1000);
 }
 
-main()
+main();
