@@ -13,11 +13,11 @@ sub even_fibonacci_sum {
         $curr = $next;
         $next = $curr + $prev;
     }
-    print("$sum\n");
+    print "$sum\n";
 }
 
 sub main() {
     even_fibonacci_sum(4000000);
 }
 
-main()
+main();

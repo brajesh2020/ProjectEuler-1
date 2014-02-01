@@ -10,7 +10,7 @@ sub get_largest_palindrome_product {
         for (my $j = $i; $j <= $upper_bound; $j++) {
             my $product = $i * $j;
             next if $product < $largest_so_far;
-            next if $product != reverse($product);
+            next if $product != reverse $product;
             $largest_so_far = $product;
         }
     }
@@ -18,8 +18,8 @@ sub get_largest_palindrome_product {
 }
 
 sub main {
-    print(get_largest_palindrome_product(2) . "\n");
-    print(get_largest_palindrome_product(3) . "\n");
+    print get_largest_palindrome_product(2) . "\n";
+    print get_largest_palindrome_product(3) . "\n";
 }
 
 main();
