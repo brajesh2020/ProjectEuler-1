@@ -17,13 +17,6 @@ class Problem():
                         needed_count += 1
         print(needed_count)
         
-    def _get_pair_count(self, n, set_size):
-        return self._combination_number(n, set_size) * \
-                self._combination_number(n - set_size, set_size) // 2
-    
-    def _combination_number(self, n, k):
-        return math.factorial(n) // math.factorial(k) // math.factorial(n-k)
-        
     def _is_needed(self, B, C):
         for i in range(len(B)):
             if B[i] > C[i]:
