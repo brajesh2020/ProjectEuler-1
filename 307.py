@@ -24,9 +24,6 @@ class Problem():
         x = self.permutation_count(n_defects, n_double_defects * 2)
         return x // (2 ** n_double_defects) // math.factorial(n_double_defects)
     
-    def double_defects_count(self, k_defects, double_defects):
-        pass
-
 def main():
     problem = Problem()
     problem.solve()
