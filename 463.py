@@ -49,7 +49,6 @@ class WeirdRecurrenceSumRelation():
         self.cached[n] = results
         return results
 
-
 class Problem():
     def solve(self):
         relation = WeirdRecurrenceSumRelation()
