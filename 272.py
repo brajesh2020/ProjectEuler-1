@@ -1,11 +1,10 @@
+import bisect
 import sys
 
 class GoodPrimeTable():
     def build(self, sieve_range):
         factor = 3**2 * 7 * 13 * 19
-        print(factor)
         shrinked_sieve_range = sieve_range // factor
-        print(shrinked_sieve_range)
         result = []
         visited = [False for _ in range(shrinked_sieve_range)]
         for i in range(2, shrinked_sieve_range):
@@ -19,17 +18,12 @@ class GoodPrimeTable():
 
 class Problem():
     def __init__(self):
-        self.sieve_range = None
-        self.table = None
+        self.sieve_range = 10**11
+        self.table = GoodPrimeTable().build(self.sieve_range)
 
     def solve(self):
-        self.sieve_range = 10**7
-        print(self.sieve_range)
-        self.table = GoodPrimeTable().build(self.sieve_range)
-        x = self.get_sum_excluding_9()
-        y = self.get_count_including_9()
-        print('Ans:', x + y)
-    
+        print('Count:', self.get_sum_excluding_9() + self.get_sum_including_9())
+
     def get_sum_excluding_9(self):
         sum = 0
         n = len(self.table)
@@ -56,25 +50,22 @@ class Problem():
                             p_all = p_ijkh * p_t
                             if p_all > self.sieve_range:
                                 break
-                            q_sum = 0
-                            for x in range(1, self.sieve_range // p_all + 1):
-                                if x % 9 == 0 or x % p_i == 0 or p_j == 0 or p_k == 0 or p_h == 0 or p_t == 0:
-                                    continue
-                                q_sum += x
-                            #print(x, p_all, p_i, p_j, p_k, p_h, p_t)
-                            sum += q_sum * p_all
-                            performance_counter += 1
+                            max_bound = self.sieve_range // p_all
+                            including = [p_i, p_j, p_k, p_h, p_t]
+                            excluding = [9]
+                            good_factor_sum = self.get_good_factor_sum(max_bound, including, excluding)
+                            sum += good_factor_sum * p_all
 
-                            #print('excluding 9:', p_all, self.sieve_range // p_all)
+                            performance_counter += 1
+                            if performance_counter % 100000 == 0:
+                                print('Excluding 9:', max_bound, including, good_factor_sum, sum)
         print(sum)
         return sum
 
-    def get_count_including_9(self):
+    def get_sum_including_9(self):
         sum = 0
         n = len(self.table)
-        #print(self.sieve_range)
         performance_counter = 0
-
         for i in range(n):
             p_i = self.table[i]
             p_i9 = p_i * 9
@@ -95,20 +86,25 @@ class Problem():
                         p_all = p_ijk * p_h
                         if p_all > self.sieve_range:
                             break
-                        #print(p_all)
-                        q_sum = 0
-                        for x in range(1, self.sieve_range // p_all + 1):
-                            if x % p_i == 0 or p_j == 0 or p_k == 0 or p_h == 0:
-                                continue
-                            q_sum += x
-                            #print(x, p_all, p_i, p_j, p_k, p_h)
-                        sum += q_sum * p_all
-
-
+                        max_bound = self.sieve_range // p_all
+                        including = [p_i, p_j, p_k, p_h]
+                        good_factor_sum = self.get_good_factor_sum(max_bound, including)
+                        sum += good_factor_sum * p_all
+        
                         performance_counter += 1
-                        #print(p_all)
+                        if performance_counter % 100000 == 0:
+                            print('Including 9:', max_bound, including, good_factor_sum, sum)
         print(sum)
         return sum
+            
+    def get_good_factor_sum(self, max_bound, including, excluding=set()):
+        good_set = set([_ for _ in range(1, max_bound + 1)])
+        bad_numbers = set(self.table[:bisect.bisect_right(self.table, max_bound)])
+        bad_numbers -= set(including)
+        bad_numbers |= set(excluding)
+        for i in bad_numbers:
+            good_set -= set([_ for _ in range(i, max_bound + 1, i)])
+        return sum(good_set)
 
 def main():
     problem = Problem()
