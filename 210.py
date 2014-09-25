@@ -1,5 +1,3 @@
-import itertools
-import math
 import sys
 
 class PrimeTable():
@@ -52,10 +50,31 @@ class ProjectEulerProblem233():
 
 class GaussCircleProblem():
     def get(self, n):
+        N = 2 * (n // 8)**2
+        floor_r = self._int_sqrt(N)
         sum = 0
-        for i in range((n - 3)// 4 + 4):
+        for x in range(floor_r + 1):
+            sum += self._int_sqrt(N - x**2)
+        return 4 * sum + 1
+
+        n = N
+        sum = 0
+        for i in range(n // 4 + 1):
             sum += n // (4*i + 1) - n // (4*i + 3)
         return 1 + 4 * sum
+
+    """
+    http://www.codecodex.com/wiki/Calculate_an_integer_square_root
+    """
+    def _int_sqrt(self, n):
+        guess = (n >> n.bit_length() // 2) + 1
+        result = (guess + n // guess) // 2
+        while abs(result - guess) > 1:
+            guess = result
+            result = (guess + n // guess) // 2
+        while result * result > n:
+            result -= 1
+        return result
 
 class Problem():
     def __init__(self):
@@ -64,18 +83,22 @@ class Problem():
     
     def solve(self):
         self.validate_by_projecteuler_forum()
+        print(self.get(10**9))
         
     def validate_by_projecteuler_forum(self):
+        assert(self.benchmark(8) == 100)
+        assert(self.get(8) == 100)
         assert(self.get(1000) == 1597880)
         assert(self.get(2000) == 6392158)
         assert(self.get(10000) == 159814790)
         assert(self.get(20000) == 639264906)
-        assert(self.get(100000) == 15981722482) # Super slow
+        assert(self.get(100000) == 15981722482)
+        assert(self.get(1000000) == 1598174519142)
     
     def get(self, n):
         square = 2 * n**2 + 2 * n + 1
         stripped = (n + 1) * (n // 4 + 1) + n * (n // 4)
-        gauss_circle = self.gauss_circle_problem.get(2 * (n // 8)**2)
+        gauss_circle = self.gauss_circle_problem.get(n)
         on_circle = self.project_euler_problem.get(n // 4)
         line = n + 1
         result = square - stripped + gauss_circle - on_circle - line + 2
@@ -83,6 +106,7 @@ class Problem():
         return result
     
     def benchmark(self, n):
+        import itertools
         square, stripped, gauss_circle, on_circle, line = 0, 0, 0, 0, 0
         for x, y in itertools.product(range(-n, n+1), repeat=2):
             if abs(x) + abs(y) > n:
