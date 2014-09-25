@@ -40,7 +40,7 @@ class Factorization():
 class ProjectEulerProblem233():
     def __init__(self):
         self.factorization = Factorization()
-
+    
     def get(self, n):
         rv = 4
         factors = self.factorization.get(n)
@@ -68,13 +68,17 @@ class Problem():
         self.project_euler_problem = ProjectEulerProblem233()
     
     def solve(self):
-        for n in [8, 1000000000]:
+        for n in [4, 8, 1000000000]:
             self.get(n)
 
     def get(self, n):
-        #print(self.gauss_circle_problem.get(n // 8))
-        print(self.project_euler_problem.get(n // 4))
-        print(n)
+        square = 2 * n**2 + 2 * n + 1
+        stripped = (n + 1) * (n // 4 + 1) + n * (n // 4)
+        gauss_circle = self.gauss_circle_problem.get(n // 8)
+        on_circle = self.project_euler_problem.get(n // 4)
+        line = n
+        print(n, square, stripped, gauss_circle, on_circle)
+        print(square - stripped + gauss_circle - on_circle - line)
 
 def main():
     problem = Problem()
