@@ -1,3 +1,5 @@
+import itertools
+import math
 import sys
 
 class PrimeTable():
@@ -14,7 +16,6 @@ class PrimeTable():
                 self.primes.append(i)
             for j in range(i + i, self.bound + 1, i):
                 visited[j] = True
-        print('Prime count:', len(self.primes))
 
 class Factorization():
     def __init__(self):
@@ -44,7 +45,6 @@ class ProjectEulerProblem233():
     def get(self, n):
         rv = 4
         factors = self.factorization.get(n)
-        print(factors)
         for p, e in factors:
             if p % 4 == 1:
                 rv *= (2 * e + 1)
@@ -53,13 +53,8 @@ class ProjectEulerProblem233():
 class GaussCircleProblem():
     def get(self, n):
         sum = 0
-        i = 0
-        while True:
-            a, b = n // (4*i + 1), n // (4*i + 3)
-            if a == 0 and b == 0:
-                break
-            i += 1
-            sum += (a - b)
+        for i in range((n - 3)// 4 + 4):
+            sum += n // (4*i + 1) - n // (4*i + 3)
         return 1 + 4 * sum
 
 class Problem():
@@ -68,17 +63,47 @@ class Problem():
         self.project_euler_problem = ProjectEulerProblem233()
     
     def solve(self):
-        for n in [4, 8, 1000000000]:
-            self.get(n)
-
+        self.validate_by_projecteuler_forum()
+        
+    def validate_by_projecteuler_forum(self):
+        assert(self.get(1000) == 1597880)
+        assert(self.get(2000) == 6392158)
+        assert(self.get(10000) == 159814790)
+        assert(self.get(20000) == 639264906)
+        assert(self.get(100000) == 15981722482) # Super slow
+    
     def get(self, n):
         square = 2 * n**2 + 2 * n + 1
         stripped = (n + 1) * (n // 4 + 1) + n * (n // 4)
-        gauss_circle = self.gauss_circle_problem.get(n // 8)
+        gauss_circle = self.gauss_circle_problem.get(2 * (n // 8)**2)
         on_circle = self.project_euler_problem.get(n // 4)
-        line = n
-        print(n, square, stripped, gauss_circle, on_circle)
-        print(square - stripped + gauss_circle - on_circle - line)
+        line = n + 1
+        result = square - stripped + gauss_circle - on_circle - line + 2
+        print(n, square, stripped, gauss_circle, on_circle, line, result)
+        return result
+    
+    def benchmark(self, n):
+        square, stripped, gauss_circle, on_circle, line = 0, 0, 0, 0, 0
+        for x, y in itertools.product(range(-n, n+1), repeat=2):
+            if abs(x) + abs(y) > n:
+                continue
+            # On square
+            square += 1
+            # On the line
+            if x == y:
+                line += 1
+            # On the stripped area
+            if x + y >= 0 and x + y <= n // 2:
+                stripped += 1
+            # On the circle
+            if (x - n // 8)**2 + (y - n // 8)**2 == 2 * (n // 8)**2:
+                on_circle += 1
+            # Inside the circle
+            if (x - n // 8)**2 + (y - n // 8)**2 <= 2 * (n // 8)**2:
+                gauss_circle += 1
+        result = square - stripped + gauss_circle - on_circle - line + 2
+        print(n, square, stripped, gauss_circle, on_circle, line, result)
+        return result
 
 def main():
     problem = Problem()
