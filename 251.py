@@ -30,16 +30,16 @@ class PrimeTable():
             k = (-5 * self._mod_inverse(8, i**2)) % i**2
             if k > bound:
                 continue
-            for j in range(k, bound + 1, k):
+            for j in range(k, bound + 1, i**2):
                 self.special_factorization[j][i] = 1
             d = i**4
             while d <= bound:
                 k = (-5 * self._mod_inverse(8, d)) % d
-                for j in range(k, bound + 1, k):
+                for j in range(k, bound + 1, d):
                     self.special_factorization[j][i] += 1
                 d *= i**2
-        print(self.factorization)
-        print(self.special_factorization)
+        #print(self.factorization)
+        #print(self.special_factorization)
         print('Sieve completed:', len(self.primes))
 
     def _mod_inverse(self, a, mod):
@@ -60,25 +60,8 @@ class Factorization():
     def __init__(self, bound):
         self.prime_table = PrimeTable(bound)
     
-    # Sieve?
     def factorize(self, n):
         return self.prime_table.factorization[n]
-        
-        d = n
-        rv = {}
-        for i in range(len(self.prime_table.primes)):
-            p = self.prime_table.primes[i]
-            if d == 1 or p > d:
-                break
-            e = 0
-            while d % p == 0:
-                d = d // p
-                e += 1
-            if e > 0:
-                rv[p] = e
-        if d > 1:
-            rv[d] = 1
-        return rv
     
     def get_all_divisor(self, factorization):
         unpacking = [[p**e for e in range(factorization[p] + 1)] for p in factorization]
@@ -89,33 +72,15 @@ class Factorization():
         second_part = self._get_square_divisor(k) # (8k + 5)
         return self._merge_two_factorization(first_part, second_part)
 
-    # Sieve?
     def _get_square_divisor(self, k):
-        # buggy!
-        # return self.prime_table.special_factorization[k]
-        n = 8 * k + 5
-        rv = {}
-        d = n
-        for i in range(len(self.prime_table.primes)):
-            p = self.prime_table.primes[i]
-            p_square = p**2
-            if p_square > d:
-                break
-            e = 0
-            while d % p_square == 0:
-                d = d // p_square
-                e += 1
-            if e > 0:
-                rv[p] = e
-        return rv
+        return self.prime_table.special_factorization[k]
 
     def _merge_two_factorization(self, x, y):
-        result = dict(x)
         for p in y:
-            if p not in result:
-                result[p] = 0
-            result[p] += y[p]
-        return result
+            if p not in x:
+                x[p] = 0
+            x[p] += y[p]
+        return x
 
     def _product(self, list):
         result = 1
@@ -128,8 +93,8 @@ class Problem():
         self.factorization = None
 
     def solve(self):
-        self.get_count(1000)
-        #self.get_count(110000000)
+        #self.get_count(10**6)
+        self.get_count(110000000)
 
     def get_count(self, bound):
         max_k = (bound - 2)//3
