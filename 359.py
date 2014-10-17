@@ -15,12 +15,10 @@ class HilbertNewHotel():
             return r2
 
         if r % 2 == 0:
-            a1 = 2*x + 3
             n = (r // 2) - 1
             S = n * (2*x + 2*n + 1)
             return S + r2
         else:
-            a1 = 2*x + 1
             n = (r // 2)
             S = n * (2*x + 2*n - 1)
             return S + r1
