@@ -24,7 +24,7 @@ class LangtonAnt():
 
     def get_black_count(self, step):
         if step >= 1 and step <= self.black_count_range:
-            return self.black_count_map[i]
+            return self.black_count_map[step - 1]
         common_diff = self.black_count_map[11208] - self.black_count_map[11000]
         q, r = divmod(step - 1 - 11000, 208)
         return self.black_count_map[11000 + r] + common_diff * q
