@@ -142,7 +142,8 @@ class ExponentialTowerAlgorithm():
             rv *= pow(prime, f[prime], integer_m)
         return rv % integer_m
 
-    def get_mod_inverse(self, a, m):
+class ModInverseAlgorithm():
+    def get(self, a, m):
         g, x, y = self._extended_gcd(a, m)
         if g != 1:
             raise Exception('modular inverse does not exist')
@@ -156,15 +157,57 @@ class ExponentialTowerAlgorithm():
             g, y, x = self._extended_gcd(b % a, a)
             return (g, x - (b // a) * y, y)
 
+class HenselLemma():
+    def get(self, n, p, e):
+        assert(e == 8)
+        print("HenselLemma =>", n, p, e)
+        r = self.__get_root(n, p)
+        for i in range(1, 3 + 1):
+            inverse_2r = self.__get_mod_inverse(2*r, p**(2**i))
+            r = (r - (r**2 - n) * inverse_2r) % p**(2**i)
+        if r % p == 1:
+            return p**e - r
+        else:
+            return r
+
+    def __get_root(self, n, p):
+        for r in range(p):
+            if (r**2 - n) % p == 0:
+                return r
+        raise Exception('root does not exist')
+
+    def __get_mod_inverse(self, a, m):
+        algorithm = ModInverseAlgorithm()
+        return algorithm.get(a, m)
+
 class Problem():
     def solve(self):
+        self.__check_small_dataset()
+
+    def __check_small_dataset(self):
+        algorithm = ExponentialTowerAlgorithm()
+        a = algorithm.get({12: 1}, {3: 9998}, {13: 8})
+        b = algorithm.get({12: 1}, {3: 1}, {13: 8})
+        b_inverse = self.__get_mod_inverse(b, 13**8)
+        n = (a * b_inverse) % 13**8
+        assert(n == 441253346) # 12^(3^(10000-2) - 3^1) = 441253346 (mod 13^8)
+        lemma = HenselLemma()
+        r = lemma.get(n, 13, 8)
+        assert((r**2 - n) % 13**8 == 0)
+        assert((8*r) % 13**8 == 617720485)
+    
+    def __check_algorithm(self):
         algorithm = ExponentialTowerAlgorithm()
         a = algorithm.get({12: 1}, {3: 3}, {13: 3})
+        assert(a == 350) # 12^3^3 = 350 (mod 13^3)
         b = algorithm.get({12: 1}, {3: 1}, {13: 3})
-        b_inverse = algorithm.get_mod_inverse(b, 13**3)
-        print(a, b, b_inverse, (a * b_inverse) % 13**3)
-        print((a * b_inverse) * algorithm.get_mod_inverse(2, 13**3) % (13**3))
-        
+        assert(b == 1728) # 12^3^1 = 1728 (mod 13^3)
+        b_inverse = self.__get_mod_inverse(b, 13**3)
+        assert((a * b_inverse) % 13**3 == 196) # 12^(3^3 - 3^1) = 196 (mod 13^3)
+
+    def __get_mod_inverse(self, a, m):
+        algorithm = ModInverseAlgorithm()
+        return algorithm.get(a, m)
 
 def main():
     problem = Problem()
