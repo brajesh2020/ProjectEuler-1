@@ -48,8 +48,6 @@ class BernoulliFormula():
         print("__init_binomial_coefficient =>", bound)
         self.__binomial_coefficient = [[1 for j in range(i)] for i in range(bound + 1)]
         for i in range(2, bound + 1):
-            #if i % 1000 == 0:
-            #    print("C(i, ) =>", i)
             for j in range(1, i - 1):
                 self.__binomial_coefficient[i][j] = (self.__binomial_coefficient[i-1][j] + self.__binomial_coefficient[i-1][j-1]) % self.__prime
 
