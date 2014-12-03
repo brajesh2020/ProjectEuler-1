@@ -44,31 +44,50 @@ class NumberTheory():
         unpacking = [[p**e for e in range(factorization[p] + 1)] for p in factorization]
         return sorted([self.__product(divisor) for divisor in itertools.product(*unpacking)])
 
+    def get_cube_roots_naive(self, a, m):
+        return [0]
+        roots = [x for x in range(m) if (x**3 - a) % m == 0]
+        #print(a, m, roots)
+        #self.get_cube_roots(a, m)
+        return roots
+
+    def get_cube_roots(self, a, m):
+        m_factorization = self.factorize(m)
+        print("get_cube_roots", a, m, m_factorization)
+        for prime in m_factorization:
+            self.get_cube_roots_prime(a % prime, prime)
+
+    def get_cube_roots_prime(self, a, prime):
+        print("get_cube_roots_prime =>", a, prime)    
+
     def __product(self, sequence):
         rv = 1
         for number in sequence:
             rv *= number
         return rv
-
-class Equation():
-    def solve_naive(self, b, mod):
-        return [a for a in range(mod) if (a**3 + b) % mod == 0]
-
+        
 class Problem():
     def __init__(self):
         self.theory = NumberTheory()
-        self.equation = Equation()
+        self.problem_prime = set()
 
     def solve(self):
+        #print(self.get_n_at_maximum(1, 1))
         print(self.get_sum(5, 5))
         #print(self.get_sum(10, 10))
         #print(self.get_sum(18, 1900))
+        print(self.problem_prime, len(self.problem_prime), sum(self.problem_prime))
 
     def get_n_at_maximum(self, a, b):
+
+
         g = self.__get_g(a, b)
         g_factorization = self.theory.factorize(g)
         g_divisors = self.theory.get_all_divisors(g_factorization)[::-1]
         #print(a, b, g, g_factorization, g_divisors)
+        for prime in g_factorization:
+            self.problem_prime.add(prime)
+
 
         for divisor in g_divisors:
             roots = self.solve_equation(b, divisor)
@@ -88,12 +107,13 @@ class Problem():
     def get_sum(self, m, n):
         result = 0
         for a in range(1, m + 1):
+            print("internal =>", a)
             for b in range(1, n + 1):
                 result += self.get_n_at_maximum(a, b)
         return result
 
-    def solve_equation(self, b, mod):
-        return self.equation.solve_naive(b, mod)
+    def solve_equation(self, b, m):
+        return self.theory.get_cube_roots_naive(m - b, m)
 
 def main():
     problem = Problem()
