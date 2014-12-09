@@ -2,7 +2,7 @@ Curve is defined by
     x(t) = (1-t)^3 + 3 t(1-t)^2 + 3 v t^2(1-t)
     y(t) = 3 v t(1-t)^2 + 3 t^2 (1-t) + t^3
 
-By Wolfram Alpha, we need to find out the value of v.
+We need to find out the value of v.  Thanks to Wolfram Alpha.
     Input: Integrate[(t^3 + 3 t^2 (1 - t) + 3 v t (1 - t)^2) D[3 v ((1 - t) t^2) + 3 t (1 - t)^2 + (1 - t)^3, t], {t, 1, 0}] == Pi/4
     Output: {{v == 2 - Sqrt[(22 - 5 Pi)/3]}, {v == 2 + Sqrt[(22 - 5 Pi)/3]}}
 
