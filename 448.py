@@ -44,10 +44,6 @@ class TotientSummatoryFunction():
 
     def get_sum(self, n):
         result = 0
-        #for k in range(1, n + 1):
-        #    result += (n // k) * k * self.phi[k]
-        #return result
-
         m = self.__int_sqrt(n)
         for d in range(1, m + 1):
             result += d * (self.get(n // d) - self.get(n // (d + 1)))
