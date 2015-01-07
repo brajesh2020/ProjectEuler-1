@@ -19,8 +19,14 @@ class Problem():
         return result
 
     def S(self, n):
-        station_array = list(set([(pow(2, i, n), pow(3, i, n)) for i in range(2 * n + 1)]))
-        sorted_station_array = sorted(station_array)
+        station_set = set()
+        for i in range(2 * n + 1):
+            station = (pow(2, i, n), pow(3, i, n))
+            if station in station_set:
+                break
+            else:
+                station_set.add(station)
+        sorted_station_array = sorted(list(station_set))
         y_array = [y for x, y in sorted_station_array]
         return self.get_longest_increasing_subsequence_length(y_array)
 
@@ -35,7 +41,6 @@ class Problem():
                 subsequence.append(n)
             else:
                 subsequence[bisect.bisect_right(subsequence, n)] = n
-        #print(subsequence)
         return len(subsequence)
 
 def main():
