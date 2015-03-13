@@ -37,8 +37,8 @@ class EulerTotientFunction():
 class Problem():
     def __init__(self):
         self.factorial = Factorial(100)
-        self.divisor = Divisor(10**2)
-        self.euler_totient_function = EulerTotientFunction(10**2)
+        self.divisor = Divisor(100)
+        self.euler_totient_function = EulerTotientFunction(100)
 
     def solve(self):
         print(self.get(10**15))
@@ -54,9 +54,9 @@ class Problem():
             if x > bound:
                 break
             else:
+                print('''f(%d, %d) = %d'''%(m, 1, x))
                 result += x
                 m += 1
-                print('''f(%d, %d) = %d'''%(m, 1, x))
         return result
 
     def get_nontrivial_case(self, bound):
@@ -69,9 +69,9 @@ class Problem():
                 if x > bound:
                     break
                 else:
+                    print('''f(%d, %d) = %d'''%(m, n, x))
                     result += x
                     n += 1
-                    print('''f(%d, %d) = %d'''%(m, n, x))
             if n == 2:
                 break
             else:
@@ -81,6 +81,7 @@ class Problem():
     def f(self, m, n):
         if n == 1:
             return self.factorial.values[m - 1]
+
         result = 0
         n_divisor = self.divisor.values[n]
         for d in n_divisor:
