@@ -1,42 +1,50 @@
+import math
 import sys
 
 class Problem():
     def solve(self):
-        self.get(10)
-        #print([self.get(n) for n in range(1, 10 + 1)])
+        #self.get(5)
+        print([self.get(n) for n in range(1, 100 + 1)])
 
     def get(self, n):
-        squares = {}
-        for i in range(n + 2):
-            squares[i**2] = i
-
-        x_map = {}
-
         total_sum = 0
-        for a in range(-n, n + 1):
-            for b in range(-n, n + 1):
-                discriminant = a**2 + 4 * b
-                if discriminant in squares:
-                    x_0 = (a - squares[discriminant]) // 2
-                    x_1 = (a + squares[discriminant]) // 2
 
-                    if x_0 not in x_map:
-                        x_map[x_0] = []
-                    x_map[x_0].append(x_1)
+        for x_1 in range(n + 1):
+            lattice_points = self.count_lattice_points(0, x_1)
+            total_sum += lattice_points
 
-                    lattice_points = self.count_lattice_points(x_0, x_1)
-                    total_sum += lattice_points
-                    print(a, b, '=>', x_0, x_1, lattice_points)
-        print('total_sum =>', total_sum)
+        for x_1 in range(1, n):
+            lattice_points = self.count_lattice_points(1, x_1)
+            total_sum += lattice_points
 
-        print(x_map)
+        sqrt_n = int(math.sqrt(n))
+        for x_0 in range(2, sqrt_n + 1):
+            for x_1 in range(x_0, n // x_0 + 1):
+                lattice_points = self.count_lattice_points(x_0, x_1)
+                total_sum += lattice_points
 
+        for x_0 in range(1, n + 1):
+            for x_1 in range(n // x_0 + 1):
+                lattice_points = self.count_lattice_points(-x_0, x_1)
+                total_sum += lattice_points
+
+        for x_0 in range(1, sqrt_n + 1):
+            for x_1 in range(1, x_0 + 1):
+                lattice_points = self.count_lattice_points(-x_0, -x_1)
+                total_sum += lattice_points
+
+        for x_0 in range(sqrt_n + 1, n):
+            for x_1 in range(1, n // x_0 + 1):
+                lattice_points = self.count_lattice_points(-x_0, -x_1)
+                total_sum += lattice_points
+        #print('total_sum =>', total_sum)
         return total_sum
-        
+
+
+
     def count_lattice_points(self, x_0, x_1):
         line = self.count_lattice_points_under_line(x_0, x_1)
         parabola = self.count_lattice_points_under_parabola(x_0, x_1)
-        #print(x_0, x_1, '=>', line, parabola, '=>', line - parabola)
         return line - parabola
 
     def count_lattice_points_under_line(self, x_0, x_1):
@@ -49,6 +57,7 @@ class Problem():
             return x_1 * (x_1 + 1) * (2 * x_1 + 1) // 6 - x_0 * (-x_0 + 1) * (-2 * x_0 + 1) // 6
         else:
             return self.count_lattice_points_under_parabola(-x_1, -x_0)
+
 
 
 def main():
