@@ -16,35 +16,24 @@ class Sequence():
     def count(self, n):
         if n == 1:
             return self.one_map
-
         half_count_map = self.count(n // 2)
-        
-        double_map = {}
-        for left_key in half_count_map:
-            left_count = half_count_map[left_key]
-            for right_key in half_count_map:
-                right_count = half_count_map[right_key]
-                new_key = (left_key + right_key) % self.k
-                if new_key not in double_map:
-                    double_map[new_key] = 0
-                double_map[new_key] = (double_map[new_key] + left_count * right_count) % self.mod
-        if n & 1 == 0:
-            print('current n =>', n)
-            return double_map
-
-        count_map = {}
-        for double_key in double_map:
-            double_count = double_map[double_key]
-            for one_key in self.one_map:
-                one_count = self.one_map[one_key]
-                new_key = (double_key + one_key) % self.k
-                if new_key not in count_map:
-                    count_map[new_key] = 0
-                count_map[new_key] = (count_map[new_key] + double_count * one_count) % self.mod
+        count_map = self.__merge(half_count_map, half_count_map)
+        if n % 2 == 1:
+            count_map = self.__merge(count_map, self.one_map)
         print('current n =>', n)
         return count_map
 
-
+    def __merge(self, left_count_map, right_count_map):
+        result = {}
+        for left_key in left_count_map:
+            left_count = left_count_map[left_key]
+            for right_key in right_count_map:
+                right_count = right_count_map[right_key]
+                new_key = (left_key + right_key) % self.k
+                if new_key not in result:
+                    result[new_key] = 0
+                result[new_key] = (result[new_key] + left_count * right_count) % self.mod
+        return result
 
 class Problem():
     def __init__(self):
@@ -67,8 +56,6 @@ class Problem():
     def get(self, n, k):
         sequence = Sequence(self.factorization[n], k, 10**9)
         return sequence.count(n)[(-n) % k]
-
-
 
 def main():
     problem = Problem()
