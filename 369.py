@@ -29,7 +29,6 @@ class Problem():
         print(count)
 
     def get(self, n):
-        print('get =>', n)
         total_count = 0
         for distribution in itertools.product(range(13 + 1), repeat=4):
             a, b, c, d = distribution
@@ -48,7 +47,7 @@ class Problem():
                 print(distribution, '=>', distribution_count)
                 total_count += distribution_count
 
-        print(total_count)
+        print(n, '=>', total_count)
         return total_count
 
     def __get_badugi_count(self, hand):
