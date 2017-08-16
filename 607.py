@@ -5,7 +5,6 @@ class Problem():
     def solve(self):
         theta = self.search_theta()
         print(self.get_days(theta))
-        #print(theta, self.__get_horizontal_shift_delta(theta))
 
     def search_theta(self):
         left = math.pi / 3.
